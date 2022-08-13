@@ -8,7 +8,7 @@ codility
     - [OddOccurrencesInArray](/src/easy/OddOccurrencesInArray.java) 
 * Lesson 3 | Time Complexity 
     - [FrogImp](/src/easy/FrogImp.java) 
-    - [PermMissingElem] (/src/easy/PermMissingElem.java) 
+    - [PermMissingElem](/src/easy/PermMissingElem.java) 
     - [TapeEquilibrium](/src/easy/TapeEquilibrium.java) 
 * Lesson 4 | Counting Elements 
     - [FrogRiverOne](/src/easy/FrogRiverOne.java) 
