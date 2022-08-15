@@ -25,5 +25,8 @@ codility
     - MaxProductOfThree 
     - Triangle 
     -
+* Data
+    - [TestData](/src/data/TestData.java)
+
 
 ---
