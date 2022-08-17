@@ -22,7 +22,7 @@ codility
     -
 * Lesson 6 | Sorting 
     - [Distinct](/src/easy/Distinct.java) 
-    - MaxProductOfThree 
+    - [MaxProductOfThree](/src/easy/MaxProductOfThree.java) 
     - Triangle 
     -
 * Data
