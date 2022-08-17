@@ -48,92 +48,72 @@ package easy;
  */
 public class MaxProductOfThree {
 
-    // just return for 3 integers
-    // maxi sort array 1 to 4
-    // transger to maxi for top 4 maximum value either neg ot pos
-    //     change A[i] to posi, and compare to lowest maxi
-    // test all results for maximumm value
+    // to get 3 normal highest value;
+    // to get 2 lowest values (highest negatives)
+    // sort element of A to normal highest, and 2 lowest
+    // evaluate the maximum positive value from the 2 negatives with 3 normals
     public int solution(int[] A) {
 
-        int buffer, count = 0, lgth = A.length, tlast = 3, negative = 0;
+        int buffer, count = 0, lgth = A.length, low0, low1, maxi;
 
+        // just return if onyl 3 integers.
         if (lgth == 3) {
             return A[0] * A[1] * A[2];
         }
 
-        // copy to temp t
-        int[] t = new int[4];
-        for (int i = 0; i < t.length; i++) {
-            t[i] = A[i];
+        // init with sorted 1st, 2 and 3rd elements
+        int[] nor = new int[3];
+        for (int i = 0; i < nor.length; i++) {
+            nor[i] = A[i];
         }
 
-        // sort in decending
+        sort(nor);
+
+        // init with lowest 1st & 2nd from nor
+        low0 = nor[2]; // eg -3
+        low1 = nor[1]; // eg -1
+
+        // determine the highest and lowest elements from A
+        for (int j = 3; j < lgth; j++) {
+
+            // sorted to nor
+            if (A[j] > nor[2]) {
+                nor[2] = A[j];
+            }
+
+            // also sorted to low0, low1
+            if (A[j] < low0) {
+                low1 = low0;
+                low0 = A[j];
+            } else if (A[j] < low1) {
+                low1 = A[j];
+            }
+
+            sort(nor);
+        }
+
+        maxi = nor[0] * nor[1] * nor[2];
+        if (maxi < nor[0] * low0 * low1) {
+            maxi = nor[0] * low0 * low1;
+        }
+
+        return maxi;
+    }
+
+    // sort in decending, highest at nor[0]
+    public void sort(int[] nor) {
+        int count, buffer;
         do {
             count = 0;
-            for (int i = 1; i < t.length; i++) {
-                if (Math.abs(t[i - 1]) < Math.abs(t[i])) {
-                    buffer = t[i - 1];
-                    t[i - 1] = t[i];
-                    t[i] = buffer;
+            for (int i = 1; i < nor.length; i++) {
+                if (nor[i - 1] < nor[i]) {
+                    buffer = nor[i - 1];
+                    nor[i - 1] = nor[i];
+                    nor[i] = buffer;
                     count++;
                 }
             }
         } while (count != 0);
-
-        // Compare with the rest of array
-        for (int j = 4; j < lgth; j++) {
-            if (Math.abs(A[j]) > Math.abs(t[tlast])) {
-                t[tlast] = A[j];
-            }
-
-            // do sort ascending for t
-            do {
-                count = 0;
-                for (int i = 1; i < t.length; i++) {
-                    if (Math.abs(t[i - 1]) < Math.abs(t[i])) {
-                        buffer = t[i - 1];
-                        t[i - 1] = t[i];
-                        t[i] = buffer;
-                        count++;
-                    }
-                }
-            } while (count != 0);
-        }
-
-        for (int i = 0; i < t.length; i++) {
-            if (t[i] < 0) {
-                negative++;
-            }
-        }
-
-        // if all 4 negative, try replace last with positive
-        if (negative >= 4) {
-            int positive = t[tlast];
-            for (int j = 4; j < lgth; j++) {
-                if (t[tlast] < A[j]) {
-                    t[tlast] = A[j];
-                }
-            }
-        }
-
-//        // display t
-//        for (int a : t) {
-//            System.out.print(" " + a);
-//        }
-//        System.out.println();
-        // determine the maximun product from  t
-        int maxi = t[0] * t[1] * t[2];
-        if (maxi < t[1] * t[2] * t[tlast]) {
-            maxi = t[1] * t[2] * t[tlast];
-        }
-        if (maxi < t[0] * t[2] * t[tlast]) {
-            maxi = t[0] * t[2] * t[tlast];
-        }
-        if (maxi < t[0] * t[1] * t[tlast]) {
-            maxi = t[0] * t[1] * t[tlast];
-        }
-        return maxi;
-
     }
 
     /**
@@ -168,24 +148,17 @@ Solution C: 6
 Solution D: 178362656
 Solution E: 0
 Solution F: 600
-Solution G: -210
+Solution G: -120
 BUILD SUCCESSFUL (total time: 2 seconds)
  */
 
- /* CodeCheck Report: 77% 
+ /* CodeCheck Report: 100% 
 Analysis summary
-The following issues have been detected: wrong answers.
-
-For example, for the input [2, 100, 3, -1000] the solution returned a wrong answer 
-(got 100000000 expected 600).
-
-For example, for the input [-2, -3, -5, -6, 0] the solution returned a wrong answer 
-(got -30 expected 0).
-
-For example, for the input [-5, -6, -4, -7, -10] the solution returned a wrong answer 
-(got -210 expected -120).
+The solution obtained perfect score.
 
 Analysis
+Detected time complexity:
+O(N * log(N))
 expand allExample tests
 ▶example
 example test✔OK
@@ -193,18 +166,9 @@ expand allCorrectness tests
 ▶one_triple
 three elements✔OK
 ▶simple1
-simple tests✘WRONG ANSWER
-got 84 expected 105
-1.0.004 sWRONG ANSWER, got 84 expected 105
-2.0.004 sOK
-3.0.004 sOK
-4.0.008 sOK
+simple tests✔OK
 ▶simple2
-simple tests✘WRONG ANSWER
-got -210 expected -120
-1.0.004 sOK
-2.0.004 sWRONG ANSWER, got -210 expected -120
-3.0.004 sOK
+simple tests✔OK
 ▶small_random
 random small, length = 100✔OK
 expand allPerformance tests
