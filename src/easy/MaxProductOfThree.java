@@ -54,8 +54,8 @@ public class MaxProductOfThree {
     //     change A[i] to posi, and compare to lowest maxi
     // test all results for maximumm value
     public int solution(int[] A) {
-        
-        int buffer, count = 0, lgth = A.length;
+
+        int buffer, count = 0, lgth = A.length, tlast = 3, negative = 0;
 
         if (lgth == 3) {
             return A[0] * A[1] * A[2];
@@ -82,8 +82,8 @@ public class MaxProductOfThree {
 
         // Compare with the rest of array
         for (int j = 4; j < lgth; j++) {
-            if (Math.abs(A[j]) > Math.abs(t[3])) {
-                t[3] = A[j];
+            if (Math.abs(A[j]) > Math.abs(t[tlast])) {
+                t[tlast] = A[j];
             }
 
             // do sort ascending for t
@@ -100,25 +100,40 @@ public class MaxProductOfThree {
             } while (count != 0);
         }
 
+        for (int i = 0; i < t.length; i++) {
+            if (t[i] < 0) {
+                negative++;
+            }
+        }
+
+        // if all 4 negative, try replace last with positive
+        if (negative >= 4) {
+            int positive = t[tlast];
+            for (int j = 4; j < lgth; j++) {
+                if (t[tlast] < A[j]) {
+                    t[tlast] = A[j];
+                }
+            }
+        }
+
 //        // display t
 //        for (int a : t) {
 //            System.out.print(" " + a);
 //        }
 //        System.out.println();
-
         // determine the maximun product from  t
         int maxi = t[0] * t[1] * t[2];
-        if (maxi < t[1] * t[2] * t[3]) {
-            maxi = t[1] * t[2] * t[3];
+        if (maxi < t[1] * t[2] * t[tlast]) {
+            maxi = t[1] * t[2] * t[tlast];
         }
-        if (maxi < t[0] * t[2] * t[3]) {
-            maxi = t[0] * t[2] * t[3];
+        if (maxi < t[0] * t[2] * t[tlast]) {
+            maxi = t[0] * t[2] * t[tlast];
         }
-        if (maxi < t[0] * t[1] * t[3]) {
-            maxi = t[0] * t[1] * t[3];
+        if (maxi < t[0] * t[1] * t[tlast]) {
+            maxi = t[0] * t[1] * t[tlast];
         }
         return maxi;
-        
+
     }
 
     /**
@@ -137,11 +152,12 @@ public class MaxProductOfThree {
         System.out.println("Solution C: " + m.solution(C));
         int[] D = d.evenOdd(999999);
         System.out.println("Solution D: " + m.solution(D));
-        int[] E = {-2, -3, -5, -6, 0};  // 0  <====
+        int[] E = {-2, -3, -5, -6, 0};  // 0
         System.out.println("Solution E: " + m.solution(E));
         int[] F = {2, 100, 3, -1000};  // 600
         System.out.println("Solution F: " + m.solution(F));
-        
+        int[] G = {-5, -6, -4, -7, -10}; // -120
+        System.out.println("Solution G: " + m.solution(G));
     }
 }
 /* Sample dialogue
@@ -150,12 +166,13 @@ Solution A: 60
 Solution B: 125
 Solution C: 6
 Solution D: 178362656
-Solution E: -30
+Solution E: 0
 Solution F: 600
+Solution G: -210
 BUILD SUCCESSFUL (total time: 2 seconds)
-*/
+ */
 
-/* CodeCheck Report: 66% 
+ /* CodeCheck Report: 77% 
 Analysis summary
 The following issues have been detected: wrong answers.
 
@@ -164,6 +181,9 @@ For example, for the input [2, 100, 3, -1000] the solution returned a wrong answ
 
 For example, for the input [-2, -3, -5, -6, 0] the solution returned a wrong answer 
 (got -30 expected 0).
+
+For example, for the input [-5, -6, -4, -7, -10] the solution returned a wrong answer 
+(got -210 expected -120).
 
 Analysis
 expand allExample tests
@@ -177,14 +197,14 @@ simple tests✘WRONG ANSWER
 got 84 expected 105
 1.0.004 sWRONG ANSWER, got 84 expected 105
 2.0.004 sOK
-3.0.004 sWRONG ANSWER, got -90 expected 0
-4.0.004 sOK
+3.0.004 sOK
+4.0.008 sOK
 ▶simple2
 simple tests✘WRONG ANSWER
-got -294 expected -120
+got -210 expected -120
 1.0.004 sOK
-2.0.004 sWRONG ANSWER, got -294 expected -120
-3.0.008 sWRONG ANSWER, got 100000000 expected 600
+2.0.004 sWRONG ANSWER, got -210 expected -120
+3.0.004 sOK
 ▶small_random
 random small, length = 100✔OK
 expand allPerformance tests
@@ -197,8 +217,5 @@ random large, length = ~100,000✔OK
 ▶large_range
 2000 * (-10..10) + [-1000, 500, -1]✔OK
 ▶extreme_large
-(-2, .., -2, 1, .., 1) and (MAX_INT)..(MAX_INT), length = ~100,000✘WRONG ANSWER
-got -8 expected 4
-1.0.220 sWRONG ANSWER, got -8 expected 4
-2.0.296 sOK
-*/
+(-2, .., -2, 1, .., 1) and (MAX_INT)..(MAX_INT), length = ~100,000✔OK
+ */
